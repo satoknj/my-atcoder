@@ -2,25 +2,29 @@ import Control.Monad (replicateM)
 import Data.Array (listArray, Array, (!))
 import Data.Foldable (for_)
 
+-- todo
+-- 現状理解
+-- タプルを使う
+
+getInts :: IO [Int]
+getInts =  map read.words <$> getLine
+
 main :: IO ()
 main = do
   -- get input
   n <- read <$> getLine
-  qrs <- replicateM n getLine
+  qrs <- replicateM n getInts
   j <- read <$> getLine
-  tds <- replicateM j getLine
+  tds <- replicateM j getInts
 
   -- transform
-  let digits = map words qrs
-  let nums = map (map read) digits
-  let qrArray = listArray (1, n) nums :: Array Int [Int]
+  let qrArray = listArray (1, n) qrs :: Array Int [Int]
 
   -- solve
-  for_ tds $ \tdStr -> do
-    let td = map read  (words tdStr) :: [Int]
-
+  for_ tds $ \td -> do
     let t = head td
     let d = td !! 1
+
     let qr = qrArray ! t :: [Int]
     let q = head qr
     let r = qr !! 1
