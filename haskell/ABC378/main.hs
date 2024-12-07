@@ -14,9 +14,9 @@ main = do
   tds <- replicateM j getIntTuple
 
   -- transform
-  let qrArray = listArray (1, n) qrs :: Array Int (Int, Int)
+  let qrArray = listArray (1, n) qrs
 
   -- solve
   for_ tds $ \(t, d) -> do
-    let (q, r) = qrArray ! t :: (Int, Int)
+    let (q, r) = qrArray ! t
     print $ d + (q - (d-r)) `mod` q
