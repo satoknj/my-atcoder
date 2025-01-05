@@ -1,9 +1,12 @@
-import Data.List (group, sort)
+import Data.List (group, sort, sortBy, sortOn)
 
 main :: IO ()
 main = do
   line <- getLine
   putStrLn $ if solve line then "Yes" else "No"
+
+-- まずは[('a',1)]みたいなのを作るとループは減るか？
+-- ちょっと手続きっぽいか？
 
 -- |
 -- >>> solve "aabbcc"
@@ -19,15 +22,12 @@ main = do
 solve :: String -> Bool
 solve x = c1 && c2 && c3
   where c1 = ((== 0) . (`mod` 2) . length) x
-        c2 = all (uncurry (==)) $ groupPairs x
-        c3 = all ((== 2) . length) $ (group . sort) x
+        c2 = all (\y -> snd y == 2) r
+        c3 = all ((/= 2) . length) $ (group . sort) $ map fst r
+        r = rle x
 
 -- |
--- >>> groupPairs "aabb"
--- [('a','a'),('b','b')]
--- >>> groupPairs "aabbc"
--- [('a','a'),('b','b')]
-groupPairs :: [a] -> [(a,a)]
-groupPairs [] = []
-groupPairs [x] = []
-groupPairs (x:y:xs) = (x,y) : groupPairs xs
+-- >>> rle "aabb"
+-- [('a',2),('b',2)]
+rle :: String -> [(Char, Int)]
+rle x = map (\y -> (head y, length y)) $ group x
