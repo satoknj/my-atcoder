@@ -10,10 +10,26 @@ main = do
 -- |
 -- >>> solve ".@@.@" 5 2
 -- ".@..."
+-- >>> solve "@@@" 3 3
+-- "..."
 solve :: String -> Int -> Int -> String
-solve s n d = do
+solve s n d = 
   let indiceis = elemIndices '@' s
-  -- [1,2,4] -> [1]
-  let a = last $ take (length indiceis - d) indiceis
-  let b = a + 1
-  take b s ++ replicate (n-b) '.'
+  in
+    if null indiceis
+    then
+      fs
+    else
+      let a = take (length indiceis - d) indiceis
+        in
+          if null a
+          then
+            fs
+          else
+            let b = last a
+              in
+                let c = b + 1
+                in
+                  take c s ++ replicate (n-c) '.'
+    where
+      fs = replicate n '.'
